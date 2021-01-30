@@ -49,7 +49,10 @@ class Data:
         all_reports = Data.get_all_reports()
 
         for report in all_reports:
-            start=report["start"]
+            try:
+                start=report["start"]
+            except:
+                break
             if start.date() == datetime.today().date():
                 return report
             
@@ -65,7 +68,10 @@ class Data:
 
         # get the index of the today's report
         for i, report in enumerate(all_reports):
-            start=report["start"]
+            try: 
+                start=report["start"]
+            except:
+                continue
             if start.date() == datetime.today().date():
                 all_reports[i] = report_to_push
                 with open(FILE_PATH, "w") as data_file_obj:
