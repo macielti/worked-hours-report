@@ -98,8 +98,6 @@ class Data:
             human_readable = str(delta)
             return re.sub(r'\..*', '', human_readable)
 
-
-
     @staticmethod
     def get_parsed_report(report):
         config = Config.load_get_config_object()
@@ -145,9 +143,3 @@ class Data:
             pass
 
         return format_parse
-
-        
-
-
-
-
