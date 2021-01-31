@@ -1,0 +1,4 @@
+{
+  "format-week": "Início Expediente: <start>\nSaída para almoço: <lunch-start>\nRetorno do almoço: <lunch-end>\nEncerramento do Expediente: <end>",
+  "format-weekend": "Início Expediente: <start>\nEncerramento do Expediente: <end>"
+}
