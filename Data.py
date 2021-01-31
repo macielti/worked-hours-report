@@ -82,6 +82,23 @@ class Data:
         with open(FILE_PATH, "w") as data_file_obj:
             json.dump(all_reports, data_file_obj, default=dt_parser)
         return True
+    
+    @staticmethod
+    def calculate_worked_hours_today(today=datetime.now()):
+        report = Data.get_today_report_object()
+
+        start = report['start']
+        end = report['end']
+
+        weekday = today.weekday()
+        if weekday < 5:
+            return "format-week"
+        else:
+            delta = end - start
+            human_readable = str(delta)
+            return re.sub(r'\..*', '', human_readable)
+
+
 
     @staticmethod
     def get_parsed_report(report):
@@ -95,13 +112,37 @@ class Data:
         start_human = start.strftime("%H:%M")
         format_parse = re.sub(r'<start>', start_human, format_parse)
 
+        # parse lunch start
+        try:
+            lunch_start = report['lunch-start']
+            lunch_start_human = lunch_start.strftime("%H:%M")
+            format_parse = re.sub(r'<lunch-start>', lunch_start_human, format_parse)
+        except:
+            format_parse = re.sub(r'<lunch-start>', '', format_parse)
+
+        # parse lunch end
+        try:
+            lunch_end = report['lunch-end']
+            lunch_end_human = lunch_end.strftime("%H:%M")
+            format_parse = re.sub(r'<lunch-end>', lunch_end_human, format_parse)
+        except:
+            format_parse = re.sub(r'<lunch-end>', '', format_parse)
+
         # parse end
         try:
-            start = report['end']
-            start_human = start.strftime("%H:%M")
-            format_parse = re.sub(r'<end>', start_human, format_parse)
+            end = report['end']
+            end_human = end.strftime("%H:%M")
+            format_parse = re.sub(r'<end>', end_human, format_parse)
         except:
             format_parse = re.sub(r'<end>', '', format_parse)
+        
+        # worked hours
+        try:
+            if report['end']:
+                worked_hours_today = Data.calculate_worked_hours_today()
+                format_parse = re.sub(r'<worked-hours-today>', worked_hours_today, format_parse)
+        except:
+            pass
 
         return format_parse
 
