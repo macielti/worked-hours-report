@@ -89,12 +89,15 @@ class Data:
 
         start = report['start']
         end = report['end']
+        delta = end - start
 
         weekday = today.weekday()
         if weekday < 5:
-            return "format-week"
+            delta_lunch = report["lunch-end"] - report["lunch-start"]
+            delta = delta - delta_lunch
+            human_readable = str(delta)
+            return re.sub(r'\..*', '', human_readable)
         else:
-            delta = end - start
             human_readable = str(delta)
             return re.sub(r'\..*', '', human_readable)
 
